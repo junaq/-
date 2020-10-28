@@ -4,17 +4,19 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<title>demo</title>
-		<link rel="stylesheet" href="./css/mqadmin.css" />
-		<script src="../js/mqadmin.js"></script>
+		<link rel="stylesheet" href="./css/adminAll.css" />
+		<script src="./js/adminAll.js"></script>
 	</head>
 	<body>
 		<div id="app" style="display: none;">
 			<!-- 左边 导航栏 -->
 			<div class="left-side" :style="{backgroundColor:webInfo.bg}">
-				<!-- 顶部盒子 显示系统名称 头像 欢迎 -->
-				<div class="left-top-box">
+			<div class="left-top-box">
 					<div class="left-top-title" :style="{color:webInfo.textColorActive}">{{adminName}}</div>
- 
+					<div class="left-top-avatar">
+						<img src="./img/head.jpg" />
+					</div>
+					<div class="left-top-welcome" :style="{color:webInfo.textColorActive}">{{adminName}}欢迎你！</div>
 				</div>
 				<!-- 导航栏盒子-->
 				<div class="left-navs-box">
@@ -52,9 +54,7 @@
 				<div class="right-header">
 					<i @click="isShowNav" :class="showNav?'el-icon-s-fold':'el-icon-s-unfold'"></i>
 					<div class="header-right">
-						<el-tooltip content="系统公告" placement="bottom" effect="light">
-							<el-badge is-dot class="item"><i @click="notice" class="el-icon-bell"></i></el-badge>
-						</el-tooltip>
+				       <el-avatar size="small" src="./img/head.jpg"></el-avatar>
 						<!--个人信息操作 -->
 						<el-dropdown :show-timeout=100 @command="personCommand">
 							<span class="el-dropdown-link">
@@ -108,19 +108,14 @@
 				</div>
 
 				<!-- 底部栏 -->
-				<!-- <div class="right-footer" :style="{backgroundColor:webInfo.bg}"><span>®{{footerText}}</span></div> -->
+ 
 			</div>
 			<!-- /右边区域 -->
 		</div>
 
-		<!-- 公告 -->
-		<div id="notice" style="display: none;" class="notice-box">
-			欢迎使用 mq-admin<br />
-			欢迎使用 mq-admin<br />
-			欢迎使用 mq-admin<br />
-			欢迎使用 mq-admin<br />
-		</div>
+ 
 
 	</body>
+	<script src="./lib/web/web.js"></script>
 </html>
-<script src="./lib/web/web.js"></script>
+

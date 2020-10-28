@@ -45,6 +45,7 @@ public class MenuController {
 			jsonObject =JSONUtil.readJSONObject(ResourceUtils.getFile("classpath:templates/lib/web/web.json"), Charset.forName("utf8"));
 			Specification<Menu>specification=DynamicSpecifications.bySearchFilter(request, Menu.class,"", new  SearchFilter("parentId", Operator.EQ, 0));
 			List<Menu>menus=menuService.findByExample(specification) ;
+			jsonObject.set("name","admin");
 			jsonObject.set("navs", menus);
 		}catch (Exception e) {
 			e.printStackTrace();

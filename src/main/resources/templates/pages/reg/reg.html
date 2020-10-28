@@ -3,19 +3,14 @@
 	<head>
 		<meta charset="utf-8">
 		<title>用户注册</title>
-		<link rel="stylesheet" href="../../lib/element2.13.0/lib-master/theme-chalk/index.css" />
-		<link rel="stylesheet" href="./reg.css" />
-		<script src="../../lib/vue/vue.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../lib/jquery-3.4.1/jquery-3.4.1.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../lib/element2.13.0/lib-master/index.js" type="text/javascript" charset="utf-8"></script>
-		<script src="../../lib/layer/layer.js"></script>
-		<script src="../../lib/axios/dist/axios.js"></script>
+		<link rel="stylesheet" href="../../css/pageAll.css" />
+		<script src="../../js/pageAll.js"></script>
 	</head>
-	<body>
+	<body style="background-image: url(../../img/bg2.jpg);">
 		<div id="reg">
 			<div class="mid_box">
 				<div class="mid_left_box">
-					<img src="../../img/head.jpg" />
+<!-- 					<img src="../../img/head.jpg" /> -->
 				</div>
 				<div class="mid_right_box">
 					<div class="title">欢迎注册使用</div>
@@ -36,5 +31,55 @@
 			</div>
 		</div>
 	</body>
-	<script src="./reg.js"></script>
+	<script>
+	var vm = new Vue({
+		el: '#reg',
+		data() {
+			return {
+				ruleForm: {
+					name: '',
+					pwd: ''
+				},
+				rules: {
+					name: {
+						required: true,
+						message: '请输入用户名',
+						trigger: 'blur'
+					},
+					pwd: {
+						required: true,
+						message: '请输入密码',
+						trigger: 'blur'
+					},
+				},
+
+			}
+		},
+		methods: {
+			submitForm(formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						// axios.post("http://localhost:8888/reg", this.ruleForm).then((res) => {
+						// 	console.log(res.data)
+						// 	if (res.data.code == 200) {
+						// 		if (res.data.code == 200) {
+						// 			layer.msg("注册成功")
+						// 			window.location.href = "../login/login.html"
+						// 		} else {
+						// 			layer.msg("注册失败")
+						// 		}
+						// 	}
+						// 	layer.msg(res.data.message)
+						// })
+					} else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			},
+		}
+	})
+
+	
+	</script>
 </html>

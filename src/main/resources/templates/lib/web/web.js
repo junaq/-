@@ -1,9 +1,9 @@
 // 系统配置js文件
 
 //加载页面 
-//var loading = layer.load();
+ 
 $(document).ready(function () {
-//	layer.close(loading);
+ 
 	$('#app').css('display', 'block')
 })
 // 设置 标签
@@ -120,46 +120,36 @@ var vm = new Vue({
 			var ul = $('.tab-item-ul').width()
 			if (ul > tbox) {
 				if (left < tbox - ul) {
-					layer.tips('到最右边了', '.tab-right', { tips: 1 });
+ 
 				} else {
 					$('.tab-item-ul').css("left", -(ul - tbox))
 				}
 			} else {
-				layer.tips('到最右边了', '.tab-right', { tips: 1 });
+ 
 			}
 		},
 		//tabs左移
 		tabsLeft: function () {
 			var left = $('.tab-item-ul').position().left;
 			if (left >= 0) {
-				layer.tips('到最左边了', '.tab-left', { tips: 1 });
+ 
 			} else if (left < -100) {
 				$('.tab-item-ul').css("left", left + 100)
 			} else {
 				$('.tab-item-ul').css("left", 0)
 			}
 		},
-		notice: function () { //公告
-			// layer.msg('公告')
-			layer.open({
-				type: 1,
-				title: '系统公告',
-				content: $('#notice'),
-				area: ['300px', 'auto'],
-				btn: '知道啦',
-				btnAlign: 'c' //按钮居中
-			});
-		},
+ 
 		// 关闭tab 
 		tabsCloseItem: function (e) {
 			if (e == 'a') {
-				// layer.msg('关闭当前')
+				 
 				closeTabThis(this.id)
 			} else if (e == 'b') {
-				// layer.msg('关闭其他')
+				 
 				closeTabOther()
 			} else {
-				// layer.msg('关闭所有')
+			 
 				closeTabAll()
 			}
 		},
@@ -250,7 +240,7 @@ function closeTabThis(id) {
 	var i = 0;
 	var len = vm.tabs.length - 2
 	if (id == 0) {
-		layer.msg('这个不能关闭的哦')
+ 
 		return
 	}
 	for (i; i < tabs.length; i++) { //找到id在tabs数组中的位置 下标
@@ -308,19 +298,4 @@ function closeWidth() {
 	}
 }
 
-// ajax 获取数据
-function getAjax(url) {
-	var data = null;
-	$.ajax({
-		url: url, //json文件路径
-		async: false,
-		dataType :"json",
-		success: function (e) { //成功
-			data = e
-		},
-		error: function (e) { //失败
-			console.log('ajax加载失败')
-		},
-	});
-	return data;
-}
+
