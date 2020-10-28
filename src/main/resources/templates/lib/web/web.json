@@ -1,0 +1,11 @@
+{
+	"name": "admin",
+	"author":"admin",
+	"version": "1.0.0",
+	"webInfo": {
+		"bg":"#545c64",
+		"textColor": "#fff",
+		"textColorActive": "#ffd04b"
+	},
+	"activeIndex":0
+}
