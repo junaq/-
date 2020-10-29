@@ -31,9 +31,7 @@
 	</div>
 </body>
 <script type="text/javascript"> 
-const router = new VueRouter({
-	mode: 'history' 
-	})
+
 var vm = new Vue({
 	el: '#login',
 //		data:getAjax("getLogin"),
@@ -60,26 +58,25 @@ var vm = new Vue({
 	},
 	methods: {
 		submitForm(formName) {
-			router.push({ path: '/index.html', params: { userId: 123 }})
-// 			this.$refs[formName].validate((valid) => {
+			
+			this.$refs[formName].validate((valid) => {
 				
-// 				if (valid) {
-// //						axios.post("http://localhost:8888/login", this.ruleForm).then((res) => {
-// //							console.log(res.data)
-// //							if (res.data.code == 200) {
-							
-							
-// //								sessionStorage.setItem("userId",res.data.data.id)
-// //							}
-// //							this.$alert('Hello World!');
-// //						})
+				if (valid) {
+						axios.post("/login/login", this.ruleForm).then((res) => {
+							console.log(res.data)
+							if (res.data.code == 200) {						
+								goUrl('/index')
+								sessionStorage.setItem("userId",res.data.data.id)
+							}
+							this.$alert('Hello World!');
+						})
  
 				
-// 				} else {
-// 					console.log('error submit!!');
-// 					return false;
-// 				}
-// 			});
+				} else {
+					console.log('error submit!!');
+					return false;
+				}
+			});
 		},
 	}
 })
