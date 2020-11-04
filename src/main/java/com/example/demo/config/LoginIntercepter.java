@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -20,7 +21,17 @@ public class LoginIntercepter implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader("token");
+        String token = "";
+ 
+        Cookie[] cookies =  request.getCookies();
+        if(cookies != null){
+            for(Cookie cookie : cookies){
+                if(cookie.getName().equals("token")){
+                	token=cookie.getValue();
+                }
+            }
+        }
+
         //401
         if (StringUtils.isEmpty(token)) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());

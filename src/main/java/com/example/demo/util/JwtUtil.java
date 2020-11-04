@@ -42,11 +42,15 @@ public class JwtUtil {
 			if (claims == null) {
 				return null;
 			}
-			Long id = (Long) claims.get("id");
-			String name = (String) claims.get("name");
+			Long id =Long.valueOf(claims.get("id").toString() );
+			String name = claims.get("name").toString();
+			String realName= claims.get("realName").toString();
+			String url= claims.get("url").toString();
 			User user = new User();
 			user.setId(id);
 			user.setName(name);
+			user.setRealName(realName);
+			user.setUrl(url);
 			return user;
 		} catch (Exception e) {
 			return null;
@@ -61,7 +65,10 @@ public class JwtUtil {
 		Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 		// 添加构成JWT的参数
 		JwtBuilder builder = Jwts.builder().setHeaderParam("typ", "JWT").claim("id", user.getId())
-				.claim("name", user.getName()).setIssuer(clientId).setAudience(name)
+				.claim("name", user.getName())
+				.claim("realName", user.getRealName())
+				.claim("url", user.getUrl())
+				.setIssuer(clientId).setAudience(name)
 				.signWith(signatureAlgorithm, signingKey);
 		// 添加Token过期时间
 		long nowMillis = System.currentTimeMillis();

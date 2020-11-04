@@ -19,11 +19,12 @@
 					class="ruleForm" status-icon> <el-form-item prop="name">
 				<el-input v-model="ruleForm.name" placeholder="请输入用户名"></el-input> </el-form-item>
 				<el-form-item prop="passWord"> <el-input
-					v-model="ruleForm.passWord" type="password" placeholder="请输入密码"></el-input>
-				</el-form-item> <el-form-item> <el-button type="primary"
-					class="login_btn" @click="submitForm('ruleForm')">登录</el-button> </el-form-item> </el-form>
+					v-model="ruleForm.passWord" type="password" placeholder="请输入密码"
+					@keyup.enter.native="submitForm('ruleForm')"></el-input> </el-form-item> <el-form-item>
+				<el-button type="primary" class="login_btn"
+					@click="submitForm('ruleForm')">登录</el-button> </el-form-item> </el-form>
 				<div class="register">
-					<a href="../reg/reg.html">前往注册</a>
+					<a href="/login/reg">前往注册</a>
 				</div>
 
 			</div>
@@ -63,12 +64,20 @@ var vm = new Vue({
 				
 				if (valid) {
 						axios.post("/login/loginUser", this.ruleForm).then((res) => {
-							console.log(res.data)
-							if (res.data.code == 200) {						
-								goUrl('/index')
-								sessionStorage.setItem("userId",res.data.data.id)
-							}
-							this.$alert('Hello World!');
+				 
+							this.$alert(res.data.meassage, '提示', {
+							    confirmButtonText: '确定',
+							    callback: action => {
+							    	if(res.data.statusCode == 200){		    		
+							    		sessionStorage.setItem("token",res.data.token)
+ 
+										goUrl('/index')
+							    	}
+							    }
+							});	
+							
+							
+							
 						})
  
 				

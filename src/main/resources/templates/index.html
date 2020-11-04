@@ -14,7 +14,7 @@
 			<div class="left-top-box">
 					<div class="left-top-title" :style="{color:webInfo.textColorActive}">{{adminName}}</div>
 					<div class="left-top-avatar">
-						<img src="./img/head.jpg" />
+						<img :src="webInfo.url" />
 					</div>
 					<div class="left-top-welcome" :style="{color:webInfo.textColorActive}">{{adminName}}欢迎你！</div>
 				</div>
@@ -54,7 +54,7 @@
 				<div class="right-header">
 					<i @click="isShowNav" :class="showNav?'el-icon-s-fold':'el-icon-s-unfold'"></i>
 					<div class="header-right">
-				       <el-avatar size="small" src="./img/head.jpg"></el-avatar>
+				       <el-avatar size="small" :src="webInfo.url"></el-avatar>
 						<!--个人信息操作 -->
 						<el-dropdown :show-timeout=100 @command="personCommand">
 							<span class="el-dropdown-link">

@@ -1,52 +1,75 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>用户注册</title>
-		<link rel="stylesheet" href="../../css/pageAll.css" />
-		<script src="../../js/pageAll.js"></script>
-	</head>
-	<body style="background-image: url(../../img/bg2.jpg);">
-		<div id="reg">
-			<div class="mid_box">
-				<div class="mid_left_box">
-<!-- 					<img src="../../img/head.jpg" /> -->
+<head>
+<meta charset="utf-8">
+<title>用户注册</title>
+<link rel="stylesheet" href="../../css/pageAll.css" />
+<script src="../../js/pageAll.js"></script>
+</head>
+<body style="background-image: url(../../img/bg2.jpg);">
+	<div id="reg">
+		<div class="mid_box">
+			<div class="mid_left_box">
+				<!-- 					<img src="../../img/head.jpg" /> -->
+			</div>
+			<div class="mid_right_box">
+				<div class="title">欢迎注册使用</div>
+				<el-form :model="ruleForm" :rules="rules" ref="ruleForm"
+					class="ruleForm" status-icon> <el-form-item prop="name">
+				<el-input v-model="ruleForm.name" placeholder="请输入用户名"></el-input> </el-form-item>
+				<el-form-item prop="realName">
+				<el-input v-model="ruleForm.realName" placeholder="请输入真实姓名"></el-input> </el-form-item>
+				<el-form-item prop="passWord"> <el-input
+					v-model="ruleForm.passWord" type="password" placeholder="请输入密码"></el-input>
+				</el-form-item> <el-form-item> <el-button type="primary"
+					class="login_btn" @click="submitForm('ruleForm')">注册</el-button> </el-form-item> </el-form>
+				<div class="register">
+					<a href="/login/">前往登录</a>
 				</div>
-				<div class="mid_right_box">
-					<div class="title">欢迎注册使用</div>
-					<el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="ruleForm" status-icon>
-						<el-form-item prop="name">
-							<el-input v-model="ruleForm.name" placeholder="请输入用户名"></el-input>
-						</el-form-item>
-						<el-form-item prop="pwd">
-							<el-input v-model="ruleForm.pwd" type="password" placeholder="请输入密码"></el-input>
-						</el-form-item>
-						<el-form-item>
-							<el-button type="primary" class="login_btn" @click="submitForm('ruleForm')">注册</el-button>
-						</el-form-item>
-					</el-form>
-					<div class="register"><a href="../login/login.html">前往登录</a></div>
-					<!-- <div class="register">前往登录</div> -->
-				</div>
+				<!-- <div class="register">前往登录</div> -->
 			</div>
 		</div>
-	</body>
-	<script>
+	</div>
+</body>
+<script>
+//验证用户名唯一性
+function validName(rule, value, callback){
+	if(value){
+		axios.post("/login/validName", {name:value}).then((res) => {
+			let data = res.data;
+		 	if(data.statusCode == 200){		    		
+	    		 callback();
+	    	}else{
+	    		 callback(new Error(data.meassage));
+	    	}			
+		})
+		
+	}
+}
 	var vm = new Vue({
 		el: '#reg',
 		data() {
 			return {
 				ruleForm: {
 					name: '',
-					pwd: ''
+					realName:'',
+					passWord: ''
 				},
 				rules: {
-					name: {
-						required: true,
+					name: [{required: true,
 						message: '请输入用户名',
+						trigger: 'blur' 
+					
+					},
+					{validator:validName,
+						trigger: 'blur'}
+					],
+					realName: {
+						required: true,
+						message: '请输入姓名',
 						trigger: 'blur'
 					},
-					pwd: {
+					passWord: {
 						required: true,
 						message: '请输入密码',
 						trigger: 'blur'
@@ -59,18 +82,20 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						// axios.post("http://localhost:8888/reg", this.ruleForm).then((res) => {
-						// 	console.log(res.data)
-						// 	if (res.data.code == 200) {
-						// 		if (res.data.code == 200) {
-						// 			layer.msg("注册成功")
-						// 			window.location.href = "../login/login.html"
-						// 		} else {
-						// 			layer.msg("注册失败")
-						// 		}
-						// 	}
-						// 	layer.msg(res.data.message)
-						// })
+						axios.post("/login/regUser", this.ruleForm).then((res) => {
+							let data = res.data;
+								this.$alert(data.meassage, '提示', {
+								    confirmButtonText: '确定',
+								    callback: action => {
+								    	if(data.statusCode == 200){		    		
+								    	goUrl("/login/");
+								    	}
+								    }
+								});	
+ 
+
+// 							
+						})
 					} else {
 						console.log('error submit!!');
 						return false;

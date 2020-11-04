@@ -1,5 +1,7 @@
 package com.example.demo.util;
 
+import com.alibaba.fastjson.JSONObject;
+
 import lombok.Data;
 
 @Data
@@ -37,8 +39,10 @@ public class ResponseUtil {
 		return this;
 	}
 	
-	public String toString (){
-		return "{statusCode:"+this.statusCode+",meassage:"+this.meassage+",token:"+this.token+"}";
+	public JSONObject toJSONObject (){
+		String s= "{\"statusCode\":\""+this.statusCode+"\",\"meassage\":\""+this.meassage+"\",\"token\":\""+this.token+"\"}";
+	    return JSONObject.parseObject(s);
+	
 	}
 
 }

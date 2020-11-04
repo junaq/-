@@ -3,7 +3,7 @@ package com.example.demo.controller;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.model.Menu;
+import com.example.demo.model.User;
 import com.example.demo.service.MenuService;
 import com.example.demo.util.DynamicSpecifications;
+import com.example.demo.util.LoginUserUtil;
 import com.example.demo.util.SearchFilter;
 import com.example.demo.util.SearchFilter.Operator;
 
@@ -39,13 +41,16 @@ public class MenuController {
 	
 	
 	@GetMapping("/getMenu")
-	public @ResponseBody String getMenu(ServletRequest request){
+	public @ResponseBody String getMenu(HttpServletRequest request){
 		JSONObject jsonObject =new JSONObject();
 		try{
+			User user=LoginUserUtil.getLoginUser(request, null);
+			 
 			jsonObject =JSONUtil.readJSONObject(ResourceUtils.getFile("classpath:templates/lib/web/web.json"), Charset.forName("utf8"));
 			Specification<Menu>specification=DynamicSpecifications.bySearchFilter(request, Menu.class,"", new  SearchFilter("parentId", Operator.EQ, 0));
 			List<Menu>menus=menuService.findByExample(specification) ;
-			jsonObject.set("name","admin");
+			jsonObject.set("name",user.getRealName());
+			jsonObject.set("url",user.getUrl());
 			jsonObject.set("navs", menus);
 		}catch (Exception e) {
 			e.printStackTrace();

@@ -29,9 +29,11 @@ var vm = new Vue({
 		 *可修改的配置信息
 		 */
 		adminName: config.name,
+		
 		// 左侧导航栏
 		webInfo: {
 			bg: config.webInfo.bg,
+			url:  config.url ,
 			// bg:'#4f74b4',
 			textColor: config.webInfo.textColor,
 			// textColorActive: "#ffd04b"
@@ -164,7 +166,7 @@ var vm = new Vue({
 				           cancelButtonText: '取消',
 				           type: 'warning'
 				         }).then(() => {
-				         window.location.href="./pages/login/login.html"
+				         window.location.href="/login/loginOut"
 				         }).catch(() => {
 				           this.$message({  type: 'info', message: '已取消退出' });          
 				         });

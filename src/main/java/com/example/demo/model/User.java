@@ -24,8 +24,19 @@ public class User {
 	private String name;
 	
 	/*
+	 * 真实姓名
+	 */
+	private String realName;
+	
+	/*
 	 * 密码
 	 */
 	 
 	private String passWord;
+	/*
+	 * 头像
+	 */
+	private String url;
+	
+	
 }
