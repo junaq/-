@@ -24,6 +24,7 @@ public class LoginIntercepter implements HandlerInterceptor {
         //401
         if (StringUtils.isEmpty(token)) {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.sendRedirect(request.getContextPath() + "/login/");
             return false;
         }
         //403
@@ -35,6 +36,7 @@ public class LoginIntercepter implements HandlerInterceptor {
         User user = jwtUtil.parseJWT(token);
         if (user == null) {
             response.setStatus(HttpStatus.FORBIDDEN.value());
+            response.sendRedirect(request.getContextPath() + "/login/");
             return false;
         }
         return true;

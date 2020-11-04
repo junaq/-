@@ -18,8 +18,8 @@
 				<el-form :model="ruleForm" :rules="rules" ref="ruleForm"
 					class="ruleForm" status-icon> <el-form-item prop="name">
 				<el-input v-model="ruleForm.name" placeholder="请输入用户名"></el-input> </el-form-item>
-				<el-form-item prop="pwd"> <el-input
-					v-model="ruleForm.pwd" type="password" placeholder="请输入密码"></el-input>
+				<el-form-item prop="passWord"> <el-input
+					v-model="ruleForm.passWord" type="password" placeholder="请输入密码"></el-input>
 				</el-form-item> <el-form-item> <el-button type="primary"
 					class="login_btn" @click="submitForm('ruleForm')">登录</el-button> </el-form-item> </el-form>
 				<div class="register">
@@ -39,7 +39,7 @@ var vm = new Vue({
 		return {
 			ruleForm: {
 				name: '',
-				pwd: ''
+				passWord: ''
 			},
 			rules: {
 				name: {
@@ -47,7 +47,7 @@ var vm = new Vue({
 					message: '请输入用户名',
 					trigger: 'blur'
 				},
-				pwd: {
+				passWord: {
 					required: true,
 					message: '请输入密码',
 					trigger: 'blur'
@@ -62,7 +62,7 @@ var vm = new Vue({
 			this.$refs[formName].validate((valid) => {
 				
 				if (valid) {
-						axios.post("/login/login", this.ruleForm).then((res) => {
+						axios.post("/login/loginUser", this.ruleForm).then((res) => {
 							console.log(res.data)
 							if (res.data.code == 200) {						
 								goUrl('/index')
