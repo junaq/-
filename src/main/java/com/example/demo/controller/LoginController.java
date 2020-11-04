@@ -42,7 +42,12 @@ public class LoginController {
 	@GetMapping("/loginOut")
 	public String loginOut(HttpServletResponse response,HttpServletRequest request){
 		Cookie cookie=new Cookie("token","");
-		cookie.setMaxAge(30 * 24 * 60 * 60);
+		cookie.setMaxAge(0);
+		cookie.setPath("/");
+        response.addCookie(cookie);
+        
+        cookie=new Cookie("menu","");
+		cookie.setMaxAge(0);
 		cookie.setPath("/");
         response.addCookie(cookie);
 		return LOGIN;

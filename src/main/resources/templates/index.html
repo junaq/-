@@ -58,11 +58,11 @@
 						<!--个人信息操作 -->
 						<el-dropdown :show-timeout=100 @command="personCommand">
 							<span class="el-dropdown-link">
-								{{adminName}}<i class="el-icon-arrow-down el-icon--right"></i>
+								{{adminName}}{{dialogFormVisible}}<i class="el-icon-arrow-down el-icon--right"></i>
 							</span>
 							<el-dropdown-menu slot="dropdown">
 								<el-dropdown-item command="center">个人中心</el-dropdown-item>
-								<el-dropdown-item command="base">基本资料</el-dropdown-item>
+					 
 								<el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
 							</el-dropdown-menu>
 						</el-dropdown>
@@ -108,7 +108,27 @@
 				</div>
 
 				<!-- 底部栏 -->
- 
+   <el-dialog title="收货地址" :visible.sync="dialogFormVisible"  @closed="handleClose">
+      <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
+    
+        <el-form-item label="头像" :label-width="formLabelWidth" >
+             <div class="left-top-avatar">
+			 <img :src="webInfo.url" />
+		</div>
+        </el-form-item>
+                <el-form-item prop="name">
+				<el-input v-model="ruleForm.name" readonly  ></el-input> </el-form-item>
+				<el-form-item prop="realName">
+				<el-input v-model="ruleForm.realName" placeholder="请输入真实姓名"></el-input> </el-form-item>
+				<el-form-item prop="passWord"> <el-input
+					v-model="ruleForm.passWord" type="password" placeholder="请输入密码"></el-input>
+				</el-form-item> <el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleSave">确 定</el-button>
+      </div>
+    </el-dialog>
 			</div>
 			<!-- /右边区域 -->
 		</div>

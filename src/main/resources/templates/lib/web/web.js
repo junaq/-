@@ -29,7 +29,26 @@ var vm = new Vue({
 		 *可修改的配置信息
 		 */
 		adminName: config.name,
-		
+		ruleForm: {
+			name: '',
+			realName:config.name,
+			passWord: ''
+		},
+		readonly: true,
+		formLabelWidth: '120px',
+		dialogFormVisible: false,
+		rules: {
+			name: {
+				required: true,
+				message: '请输入用户名',
+				trigger: 'blur'
+			},
+			passWord: {
+				required: true,
+				message: '请输入密码',
+				trigger: 'blur'
+			},
+		},
 		// 左侧导航栏
 		webInfo: {
 			bg: config.webInfo.bg,
@@ -62,6 +81,7 @@ var vm = new Vue({
 			var tbox = $('.tab-item-box')
 		}
 	},
+ 
 	methods: {
 		isShowNav: function (e) { //隐藏显示左边导航栏
 			if (this.showNav) {
@@ -80,6 +100,24 @@ var vm = new Vue({
 			this.activeIndex = '0'
 			$('.tab-item-ul').css("left", 0)
 		},
+		 handleClose () {
+		      this.$refs.ruleForm.resetFields()
+		      this.form = {
+		    		name: '',
+					passWord: ''
+		      }
+		    },
+		    handleSave () {
+		      this.$refs.ruleForm.validate((valid) => {
+		        if (valid) {
+		          console.log('输入正确')
+		          this.dialogFormVisible = false
+		        } else {
+		          console.log('输入错误')
+		        }
+		      })
+		    },
+		
 		openTabs: function (e) { //打开页面 加载显示tabs
 			
 			this.welcome = false
@@ -158,8 +196,15 @@ var vm = new Vue({
 		// 个人信息操作
 		personCommand(e){
 			 switch(e){
-				 case 'center': this.$message("个人中心");break;
-				 case 'base': this.$message("基本资料");break;
+				 case 'center':this.$confirm('确定打开个人中心吗?', '提示', {
+			           confirmButtonText: '确定',
+			           cancelButtonText: '取消',
+			           type: 'warning'
+			         }).then(() => {
+                       Vue.set(this,'dialogFormVisible',true);
+			         });
+			 break;
+		 
 				 case 'logout': 
 				 this.$confirm('确定退出登录吗?', '提示', {
 				           confirmButtonText: '确定',
