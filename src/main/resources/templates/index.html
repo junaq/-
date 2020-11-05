@@ -58,7 +58,7 @@
 						<!--个人信息操作 -->
 						<el-dropdown :show-timeout=100 @command="personCommand">
 							<span class="el-dropdown-link">
-								{{adminName}}{{dialogFormVisible}}<i class="el-icon-arrow-down el-icon--right"></i>
+								{{adminName}}<i class="el-icon-arrow-down el-icon--right"></i>
 							</span>
 							<el-dropdown-menu slot="dropdown">
 								<el-dropdown-item command="center">个人中心</el-dropdown-item>
@@ -108,7 +108,7 @@
 				</div>
 
 				<!-- 底部栏 -->
-   <el-dialog title="收货地址" :visible.sync="dialogFormVisible"  @closed="handleClose">
+   <el-dialog :title="adminName" :visible.sync="dialogFormVisible"  @closed="handleClose">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
     
         <el-form-item label="头像" :label-width="formLabelWidth" >
