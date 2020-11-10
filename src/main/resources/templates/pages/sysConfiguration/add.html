@@ -7,128 +7,94 @@
 <script src="../../js/pageAll.js"></script>
 </head>
 <body>
+<div id="SysConfigurationAdd">
  
-  <div id="sysConfiguration">
-    <div class="searchBox">
-      <el-input prefix-icon="iconfont icon-sousuo" v-model="searchTableInfo" placeholder="请输入搜索内容" style="width:240px"></el-input>
-    </div>
-    <el-table
-      :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
+	 <el-button size="mini" type="primary"  @click.native.prevent="saveData()">保存</el-button>
+	 <el-table   
       border
-      @selection-change="handleSelectionChange"
+      :data="tableData"
       style="width: 100%;margin: 10px 0;text-align:center;">
-      <el-table-column
-        type="selection"
-        align="center"
-         >
-      </el-table-column>
-      <el-table-column
-        prop="date"
-        align="center"
-        label="手机"
-         >
-      </el-table-column>
-      <el-table-column
+       <el-table-column
         prop="name"
         align="center"
-        label="姓名"
-         >
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        align="center"
-        label="地址"
-       >
-      </el-table-column>
+        label="列名"
+       >        
+       </el-table-column>
+       
        <el-table-column
+        prop="egName"
         align="center"
-        label="操作"
-       >
-           <template slot-scope="scope">
-              <el-button size="mini" type="primary"  @click.native.prevent="handleEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger"  @click.native.prevent="handleEdit(scope.row)">删除</el-button>
-            </template>
-      </el-table-column>
+        label="别名"
+       >        
+       </el-table-column>
+       
+       <el-table-column
+        prop="type"
+        align="center"
+        label="类型"
+       >  
+   <template slot-scope="scope">
+  <el-select v-model="scope.row.type" placeholder="请选择" style="width:100%">
+    <el-option label="文本框" value="string"></el-option>
+    <el-option label="下拉框" value="enum"></el-option>
+    <el-option label="整数框" value="integer"></el-option>
+    <el-option label="浮点数" value="float"></el-option>
+    <el-option label="日期框" value="date"></el-option>
+  </el-select>
+       </template>    
+   </el-table-column>
+       
+       <el-table-column
+        prop="source"
+        align="center"
+        label="数据源(用;分隔)"
+       >  
+   <template slot-scope="scope">
+  <el-input v-model="scope.row.source" placeholder="a|b" style="width:100%">
+ 
+       </template>    
+   </el-table-column>
       
-    </el-table>
-    <!--分页-->
-    <el-pagination
-      center
-      background
-      layout="prev, pager, next, sizes, total, jumper"
-      :page-sizes="[10,100,1000,2000]"
-      :page-size="pagesize"
-      :total="tableData.length"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-    >
-    </el-pagination>
-  </div>
+      </el-table>				
  
+</div>
+<script type="text/javascript">
+var key=getUrlKey("tableName");
+var tableData=getAjax('/SysConfiguration/getTable/'+key,'POST').tableData;
+var vm=new  Vue({
+	el: '#SysConfigurationAdd',
+	data:{
+		ruleForm:{ },		
+		rules:{},
+		tableData:tableData
+		
+	},
+	methods:{
+		saveData(){
+		 
+			console.log(this.tableData);
+			
+			axios.post("/SysConfiguration/saveData",this.tableData).then((res) => {
+				 
+				this.$alert(res.data.meassage, '提示', {
+				    confirmButtonText: '确定',
+				    callback: action => {
+				    	if(res.data.statusCode == 200){		    		
+				    		parent.closeTabThis(99);  
+				    	}
+				    }
+				});	
+				
+				
+				
+			})
+			
+		}
+		
+	}
+	
+})
 
-<script>
- var vm =new  Vue( {
-        el:"#sysConfiguration",
-	    data:{
-	    	   searchTableInfo:"",
-		       pagesize: 10,
-		       currpage: 1,
-		       getSearchInfo:[],
-	    	
-	    },
-	      methods: {
-	        handleCurrentChange(cpage) {
-	          this.currpage = cpage;
-	        },
-	        handleSizeChange(psize) {
-	          this.pagesize = psize;
-	        },
-	        //操作多选
-	        handleSelectionChange(val) {
-	        	console.log(val);
-	          this.multipleSelection = val;
-	        },
-	        handleEdit(val){
-	        	console.log(val.name);
-	        },
-	        
-	        
-	        
-	        //获取信息
-	        info(){
-	        //这些数据视情况，是你从后端拿来的。
-	          let Data=[
-	            {
-	              date: "2016-05-01",
-	              name: "王小虎",
-	              
-	              address: "上海市普陀区金沙江路 1518 弄"
-	            } 
- 
-	          ];
-	          this.getSearchInfo = Data;
-	      
-	        }
-	      },
-	      computed: {
-	        // 根据计算属性模糊搜索
-	        tableData () {
-	          const searchTableInfo = this.searchTableInfo
-	          if (searchTableInfo) {
-	            return this.getSearchInfo.filter(data => {
-	             return Object.keys(data).some(key => {
-	                return String(data[key]).toLowerCase().indexOf(searchTableInfo) > -1
-	              })
-	            })
-	          }
-	          return this.getSearchInfo
-	        }
-	      },
-	      created(){
-	        this.info();
-	      }
- })
 </script>
- 
 </body>
 </html>

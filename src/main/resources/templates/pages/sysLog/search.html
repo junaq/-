@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../../css/pageAll.css" />
+<script src="../../js/pageAll.js"></script>
+</head>
+<body>
+ 
+  <div id="sysLog">
+    <div class="searchBox">
+      <el-input prefix-icon="iconfont icon-sousuo" v-model="searchTableInfo" placeholder="请输入搜索内容" style="width:240px"></el-input>
+    </div>
+    <el-table
+      :data="tableData.slice((currpage - 1) * pagesize, currpage * pagesize)"
+      border
+      @selection-change="handleSelectionChange"
+      style="width: 100%;margin: 10px 0;text-align:center;">
+ 
+
+      
+      <template v-for="(item,index) in colmuns">
+ 
+        <el-table-column
+        :prop="item.name "
+        align="center"
+        :label="item.config "
+       >
+      </template>
+ 
+      
+    </el-table>
+    <!--分页-->
+    <el-pagination
+      center
+      background
+      layout="prev, pager, next, sizes, total, jumper"
+      :page-sizes="[10,100,1000,2000]"
+      :page-size="pagesize"
+      :total="tableData.length"
+      @current-change="handleCurrentChange"
+      @size-change="handleSizeChange"
+    >
+    </el-pagination>
+  </div>
+ 
+
+<script>
+ 
+ var vm =new  Vue( {
+        el:"#sysLog",
+	    data:{
+	    	   searchTableInfo:"",
+		       pagesize: 10,
+		       currpage: 1,
+		       getSearchInfo:[],
+		       colmuns:[{name:"userName",config:'用户名'},{name:"submitData",config:'数据'},{name:"submitSql",config:'执行sql'},{name:"createTime",config:'创建日期'}]
+	    	
+	    },
+	      methods: {
+	        handleCurrentChange(cpage) {
+	          this.currpage = cpage;
+	        },
+	        handleSizeChange(psize) {
+	          this.pagesize = psize;
+	        },
+	        //操作多选
+	        handleSelectionChange(val) {
+	        	 
+	          this.multipleSelection = val;
+	        },
+	 
+	        
+	        
+	        //获取信息
+	        info(){
+	        //这些数据视情况，是你从后端拿来的。
+	        var url ="/sysLog/getList"
+	          var web = getAjax(url,'POST');
+	 
+	          let Data=web.data;
+	          let colmuns=web.colmuns;
+	          this.getSearchInfo = Data;
+	         
+	        }
+	      },
+	      computed: {
+	        // 根据计算属性模糊搜索
+	        tableData () {
+	          const searchTableInfo = this.searchTableInfo
+	          if (searchTableInfo) {
+	            return this.getSearchInfo.filter(data => {
+	             return Object.keys(data).some(key => {
+	                return String(data[key]).toLowerCase().indexOf(searchTableInfo) > -1
+	              })
+	            })
+	          }
+	          return this.getSearchInfo
+	        }
+	      },
+	      created(){
+	        this.info();
+	      }
+ })
+</script>
+ 
+</body>
+</html>

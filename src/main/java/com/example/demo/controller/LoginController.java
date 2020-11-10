@@ -70,7 +70,7 @@ public class LoginController {
 				// 生成token
 				String token = jwtUtil.createJWT(user);
 				Cookie cookie=new Cookie("token",token);
-				cookie.setMaxAge(30 * 24 * 60 * 60);
+				cookie.setMaxAge(1 * 24 * 60 * 60);
 				cookie.setPath("/");
 		        response.addCookie(cookie);
 				return ResponseUtil.ok("登陆成功").setToken(token).toJSONObject();

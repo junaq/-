@@ -11,10 +11,11 @@ function setTabs(e) {
 	vm.tabs = e
 	vm.$set(vm.tabs, 1, e)
 }
+var urlData={};
 // 设置导航栏
 function setConfig() {
 	var url = '/menu/getMenu'
-	var web = getAjax(url);
+	var web = getAjax(url,'GET');
 	// console.log(web)
 	return web
 }
@@ -100,6 +101,9 @@ var vm = new Vue({
 			this.activeIndex = '0'
 			$('.tab-item-ul').css("left", 0)
 		},
+		openTabs:function(e){
+			openTabs(e);
+		},
 		 handleClose () {
 		      this.$refs.ruleForm.resetFields()
 		      this.form = {
@@ -118,29 +122,7 @@ var vm = new Vue({
 		      })
 		    },
 		
-		openTabs: function (e) { //打开页面 加载显示tabs
-			
-			this.welcome = false
-			var tabs = this.tabs
-			if (this.tabs.length == 0) {
-				this.tabs.push({ id: e.id, data: e })
-				this.id = e.id
-				this.item = e
-				calWidth()
-			} else {
-				var back = checkTab(e.id)
-				if (back == 1) { //可以插入
-					this.tabs.push({ id: e.id, data: e })
-					this.id = e.id
-					this.item = e
-					calWidth()
-				} else { //已打开
-					this.id = e.id;
-					this.item = e
-					calTabWid(e.id)
-				}
-			}
-		},
+
 		//点击tab显示页面 并改变颜色 调整距离
 		tabActive: function (e) {
 			this.welcome = false
@@ -345,4 +327,26 @@ function closeWidth() {
 	}
 }
 
-
+function openTabs (e) { //打开页面 加载显示tabs
+	 
+	vm.welcome = false
+	var tabs = vm.tabs
+	if (vm.tabs.length == 0) {
+		vm.tabs.push({ id: e.id, data: e })
+		vm.id = e.id
+		vm.item = e
+		calWidth()
+	} else {
+		var back = checkTab(e.id)
+		if (back == 1) { //可以插入
+			vm.tabs.push({ id: e.id, data: e })
+			vm.id = e.id
+			vm.item = e
+			calWidth()
+		} else { //已打开
+			vm.id = e.id;
+			vm.item = e
+			calTabWid(e.id)
+		}
+	}
+}

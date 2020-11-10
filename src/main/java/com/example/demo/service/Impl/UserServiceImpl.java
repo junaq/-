@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<User> findByExample(Specification<User> specification) {
 		// TODO Auto-generated method stub
-		return  userDao.findAll();
+		return  userDao.findAll(specification);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.Cookie;
@@ -54,7 +55,7 @@ public class MenuController {
 	        if(cookies != null){
 	            for(Cookie cookie : cookies){
 	                if(cookie.getName().equals("menu")){
-	                	menuList=cookie.getValue();
+//	                	menuList=cookie.getValue();
 	                }
 	            }
 	        }
@@ -68,14 +69,24 @@ public class MenuController {
 				User user=LoginUserUtil.getLoginUser(request, response); 
 				jsonObject =JSONUtil.readJSONObject(ResourceUtils.getFile("classpath:templates/lib/web/web.json"), Charset.forName("utf8"));
 				Specification<Menu>specification=DynamicSpecifications.bySearchFilter(request, Menu.class,"", new  SearchFilter("parentId", Operator.EQ, 0));
-				List<Menu>menus=menuService.findByExample(specification) ;
+				List<Menu>menus= new ArrayList<Menu>();
+				
+				if("admin".equals( user.getName())) {
+					
+					menus=menuService.findByExample(specification) ;
+				}else {
+					menus=menuService.findByUserId(user.getId()) ;
+				}
+				
+				
+				
 				jsonObject.set("name",user.getRealName());
 				jsonObject.set("url",user.getUrl());
 				jsonObject.set("navs", menus);
 				menuList=jsonObject.toString();
 				String encodeCookie = URLEncoder.encode(menuList, "utf-8");
 				Cookie cookie=new Cookie("menu",encodeCookie);
-				cookie.setMaxAge(30 * 24 * 60 * 60);
+				cookie.setMaxAge(1 * 8 * 60 * 60);
 				cookie.setPath("/");
 				response.addCookie(cookie);
 			}else {

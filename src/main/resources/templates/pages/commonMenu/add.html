@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title></title>
+<link rel="stylesheet" href="../../css/pageAll.css" />
+<script src="../../js/pageAll.js"></script>
+ 
+</head>
+<body>
+	<div id="CommonMenuAdd">
+		<dynamic-form ref="dynamic-form" v-model="data" lang="zh_CN"
+			:descriptors="descriptors"> <template
+			slot="operations"> <el-button @click="reset">重置</el-button>
+		<el-button type="primary" @click="submit">提交</el-button> </template> </dynamic-form>
+
+	</div>
+	<script type="text/javascript">
+var key=getUrlKey("tableName");
+var data=getAjax('/SysConfiguration/CommonMenuAdd/'+key,'POST') ;
+console.log(data);
+var vm=new Vue({
+	el: '#CommonMenuAdd',
+	data: function() {
+		return data
+	},
+	methods: {
+		reset() {
+			this.$refs['dynamic-form'].resetFields()
+		},
+		validate() {
+		 
+			this.$refs['dynamic-form'].validate()
+
+		},
+		submit() {
+
+			this.$refs['dynamic-form'].validate((valid) => {
+				if (valid) {
+					var jsonDate={"tableName":key,"data":this.data};
+					console.log(jsonDate);
+	  
+					
+					axios.post("/SysConfiguration/saveCommonMenuData",jsonDate).then((res) => {
+						 
+						this.$alert(res.data.meassage, '提示', {
+						    confirmButtonText: '确定',
+						    callback: action => {
+						    	if(res.data.statusCode == 200){		    		
+						    		reset();  
+						    	}
+						    }
+						});		
+					})
+					
+				}
+			})
+		}
+
+	}
+
+})
+
+</script>
+</body>
+</html>

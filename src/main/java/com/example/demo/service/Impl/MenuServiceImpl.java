@@ -20,6 +20,8 @@ public class MenuServiceImpl implements MenuService {
 	@Autowired
 	private MenuDao menuDao;
 
+	 
+	
 	@Override
 	public List<Menu> findByExample(Specification<Menu> specification, Page page) {
 		org.springframework.data.domain.Page<Menu> springDataPage = menuDao.findAll(specification,
@@ -56,6 +58,12 @@ public class MenuServiceImpl implements MenuService {
 	public List<Menu> findAll() {
 		// TODO Auto-generated method stub
 		return menuDao.findAll();
+	}
+
+	@Override
+	public List<Menu> findByUserId(Long id) {
+		// TODO Auto-generated method stub
+		return menuDao.findByUserId(id);
 	}
 
 }

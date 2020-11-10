@@ -12,10 +12,11 @@ function goUrl(url, query) {
 }
 
 // ajax 获取数据
-function getAjax(url) {
+function getAjax(url,type) {
 	var data = null;
 	$.ajax({
 		url : url, // json文件路径
+		type: type,
 		async : false,
 		dataType : "json",
 		success : function(e) { // 成功
@@ -28,7 +29,9 @@ function getAjax(url) {
 	return data;
 }
 
-
+function getUrlKey (name) {
+    return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null
+}
 
 //获取cookie、
   function getCookie(name) {

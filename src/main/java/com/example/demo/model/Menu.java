@@ -12,11 +12,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
-import lombok.Data;
-
 @Entity
 @Table(name = "t_menu")
- 
+
 public class Menu {
 
 	@Id
@@ -37,8 +35,7 @@ public class Menu {
 	 * 链接
 	 */
 	private String href;
-   
- 
+
 	private Long parentId;
 
 	@OneToMany(mappedBy = "parentId", fetch = FetchType.EAGER)
@@ -46,7 +43,12 @@ public class Menu {
 	private List<Menu> children = new ArrayList<Menu>();
 
 	public String getId() {
-		return id.toString();
+		if (id != null) {
+
+			return id.toString();
+		} else {
+			return null;
+		}
 	}
 
 	public void setId(Long id) {
@@ -92,7 +94,5 @@ public class Menu {
 	public void setChildren(List<Menu> children) {
 		this.children = children;
 	}
-    
-	
 
 }
