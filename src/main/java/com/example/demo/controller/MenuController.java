@@ -1,20 +1,18 @@
 package com.example.demo.controller;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.io.File;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,6 +25,7 @@ import com.example.demo.util.LoginUserUtil;
 import com.example.demo.util.SearchFilter;
 import com.example.demo.util.SearchFilter.Operator;
 
+import cn.hutool.core.io.resource.ClassPathResource;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 
@@ -51,23 +50,15 @@ public class MenuController {
 		JSONObject jsonObject =new JSONObject();
 		String menuList=null;
 		try{
-	        Cookie[] cookies =  request.getCookies();
-	        if(cookies != null){
-	            for(Cookie cookie : cookies){
-	                if(cookie.getName().equals("menu")){
-//	                	menuList=cookie.getValue();
-	                }
-	            }
-	        }
-	      
-
- 
-
-	        
-			if( StringUtils.isEmpty(menuList)) {
-				
 				User user=LoginUserUtil.getLoginUser(request, response); 
-				jsonObject =JSONUtil.readJSONObject(ResourceUtils.getFile("classpath:templates/lib/web/web.json"), Charset.forName("utf8"));
+				
+				ClassPathResource resource = new ClassPathResource("classpath:templates/lib/web/web.json");
+				InputStream inputStream=resource.getStream();
+				
+				File newFile =File.createTempFile("web", ".json");
+				FileUtils.copyInputStreamToFile(inputStream, newFile);
+				
+				jsonObject =JSONUtil.readJSONObject(newFile, Charset.forName("utf8"));
 				Specification<Menu>specification=DynamicSpecifications.bySearchFilter(request, Menu.class,"", new  SearchFilter("parentId", Operator.EQ, 0));
 				List<Menu>menus= new ArrayList<Menu>();
 				
@@ -84,15 +75,8 @@ public class MenuController {
 				jsonObject.set("url",user.getUrl());
 				jsonObject.set("navs", menus);
 				menuList=jsonObject.toString();
-				String encodeCookie = URLEncoder.encode(menuList, "utf-8");
-				Cookie cookie=new Cookie("menu",encodeCookie);
-				cookie.setMaxAge(1 * 8 * 60 * 60);
-				cookie.setPath("/");
-				response.addCookie(cookie);
-			}else {
-				menuList=URLDecoder.decode(menuList , "utf-8");
-			}
-			
+			 
+		 
 			
 		}catch (Exception e) {
 			e.printStackTrace();

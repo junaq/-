@@ -63,7 +63,7 @@
 		       pagesize: 10,
 		       currpage: 1,
 		       getSearchInfo:[],
-		       colmuns:[]
+		       colmuns:[{name:'tableName',configName:'表名'}]
 	    	
 	    },
 	      methods: {
@@ -96,7 +96,7 @@
 	          let Data=web.data;
 	          let colmuns=web.colmuns;
 	          this.getSearchInfo = Data;
-	          this.colmuns.push( colmuns);
+// 	          this.colmuns.push( colmuns);
 	        }
 	      },
 	      computed: {

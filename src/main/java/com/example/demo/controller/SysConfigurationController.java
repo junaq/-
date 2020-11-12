@@ -46,7 +46,7 @@ public class SysConfigurationController {
 			tables.add(table);
 		});
 		map.put("data", tables);
- 
+        
 		String json = JSON.toJSONString(map);
 		return json;
 
