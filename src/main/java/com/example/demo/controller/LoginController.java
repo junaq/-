@@ -115,7 +115,7 @@ public class LoginController {
 	        File dest = new File(jarF.getParentFile().toString()+"/img/"+user.getName()+"tmp.jpg");
 	        file.transferTo(dest);
 	        
-	        return ResponseUtil.ok("上传成功") .toJSONObject();
+	        return ResponseUtil.ok("上传成功").setToken(user.getName()+"tmp.jpg") .toJSONObject();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseUtil.error("上传失败").toJSONObject();
@@ -127,8 +127,11 @@ public class LoginController {
  
 			user.setPassWord( MD5Util.MD5Encode(user.getPassWord(), "utf-8"));
 			userService.updateUser(user);
-			
-			
+			ApplicationHome h = new ApplicationHome(getClass());
+	        File jarF = h.getSource();
+	        
+	        File dest = new File(jarF.getParentFile().toString()+"/img/"+user.getName()+"tmp.jpg");
+	        dest.renameTo(new File(jarF.getParentFile().toString()+"/img/"+user.getName()+".jpg"));
 	        return ResponseUtil.ok("修改成功") .toJSONObject();
 		} catch (Exception e) {
 			e.printStackTrace();

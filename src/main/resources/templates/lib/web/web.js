@@ -130,7 +130,7 @@ var vm = new Vue({
 			    confirmButtonText: '确定',
 			    callback: action => {
 			    	if(res.statusCode == 200){		    		
-			    	  this.webInfo.url=config.url;
+			    	  $("#imgUpload").attr("src", '/login/openImg/'+res.token);
 			    	}
 			    }
 			});	
