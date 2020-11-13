@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -102,6 +103,7 @@ public class SysConfigurationController {
 				sysConfiguration.setEgName(a.get("column_name").toString());
 				sysConfiguration.setTableName(tableName);
 				sysConfiguration.setDataBase(dataBase);
+				sysConfiguration.setPriority(0);
 				String dataType = a.get("data_type").toString();
 				if ("int".equals(dataType) || "bigInt".equals(dataType)) {
 					sysConfiguration.setType("string");
@@ -156,8 +158,8 @@ public class SysConfigurationController {
 			HttpServerResponse response) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		Map<String, Object> dataMap = new HashMap<String, Object>();
-		Map<String, Object> descriptorsMap = new HashMap<String, Object>();
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
+		Map<String, Object> descriptorsMap = new LinkedHashMap<String, Object>();
 
 		List<SysConfiguration> sysConfigurations = sysConfigurationService.findByTableNameAndDataBase(tableName,dataBase);
 		for (SysConfiguration sysConfiguration : sysConfigurations) {

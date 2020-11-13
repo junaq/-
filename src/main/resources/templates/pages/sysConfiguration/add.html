@@ -25,7 +25,10 @@
         prop="egName"
         align="center"
         label="别名"
-       >        
+       >  
+        <template slot-scope="scope">
+        <el-input v-model="scope.row.egName"></el-input>
+        </template>     
        </el-table-column>
        
        <el-table-column
@@ -51,10 +54,17 @@
        >  
    <template slot-scope="scope">
   <el-input v-model="scope.row.source" placeholder="a|b" style="width:100%">
- 
-       </template>    
+   </template>    
    </el-table-column>
-      
+      <el-table-column
+        prop="priority"
+        align="center"
+        label="优先级(从大到小)"
+       >  
+        <template slot-scope="scope">
+        <el-input v-model="scope.row.priority"></el-input>
+        </template>     
+       </el-table-column>  
       </el-table>				
  
 </div>

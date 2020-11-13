@@ -23,6 +23,7 @@ public interface SysConfigurationDao extends JpaRepository<SysConfiguration, Lon
 	public List<Map<String, Object>> getColmunsByTableNameAndDataBase(String tableName, String dataBase);
 
 	 
+	@Query("from  SysConfiguration where tableName=?1 and dataBase=?2 order  by priority desc") 
 	public List<SysConfiguration> findByTableNameAndDataBase(String tableName, String dataBase);
 	
 	@Transactional

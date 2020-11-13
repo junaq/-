@@ -21,4 +21,5 @@ public class SysConfiguration {
 	private String egName;
 	private String type;
 	private String source;
+	private int priority;
 }
