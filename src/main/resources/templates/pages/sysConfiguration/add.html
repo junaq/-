@@ -60,7 +60,9 @@
 </div>
 <script type="text/javascript">
 var key=getUrlKey("tableName");
-var tableData=getAjax('/SysConfiguration/getTable/'+key,'POST').tableData;
+var dataBase=getUrlKey("dataBase");
+var tableData=getAjax('/SysConfiguration/getTable/'+key+'/'+dataBase,'POST').tableData;
+
 var vm=new  Vue({
 	el: '#SysConfigurationAdd',
 	data:{

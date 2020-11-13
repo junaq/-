@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.demo.model.SysConfiguration;
 import com.example.demo.model.Tables;
 import com.example.demo.model.User;
+import com.example.demo.service.DataBaseSetService;
 import com.example.demo.service.SysConfigurationService;
 import com.example.demo.util.LoginUserUtil;
 import com.example.demo.util.ResponseUtil;
@@ -34,15 +35,19 @@ public class SysConfigurationController {
 	@Autowired
 	private SysConfigurationService sysConfigurationService;
 
+	@Autowired
+	private DataBaseSetService dataBaseSetService;
+	
 	@PostMapping("/getList")
 	public @ResponseBody String getList(HttpServletRequest request, HttpServerResponse response) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
-		List<String> list = sysConfigurationService.ShowTables();
+		List<Map<String, Object>> list = sysConfigurationService.ShowTables();
 		List<Tables> tables = new ArrayList<Tables>();
 		list.stream().forEach(a -> {
 			Tables table = new Tables();
-			table.setTableName(a);
+			table.setTableName(a.get("tableName").toString());
+			table.setDataBase(a.get("data_Base").toString());
 			tables.add(table);
 		});
 		map.put("data", tables);
@@ -51,17 +56,38 @@ public class SysConfigurationController {
 		return json;
 
 	}
+	@PostMapping("/getDataBase")
+	public @ResponseBody String getDataBase(HttpServletRequest request, HttpServerResponse response) {
 
-	@PostMapping("/getTable/{tableName}")
-	public @ResponseBody String getList(@PathVariable String tableName, HttpServletRequest request,
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<String> list = sysConfigurationService.ShowDataBases();
+ 
+		List<String>dataBaseSets=dataBaseSetService.findCheckedDataBaseName();
+		list.remove("information_schema");
+		list.remove("performance_schema");
+		list.remove("mysql");
+		
+		map.put("data", list);
+		map.put("CheckData", dataBaseSets);
+        
+		String json = JSON.toJSONString(map);
+		return json;
+
+	}
+
+	
+
+	@PostMapping("/getTable/{tableName}/{dataBase}")
+	public @ResponseBody String getList(@PathVariable String tableName,@PathVariable String dataBase, HttpServletRequest request,
 			HttpServerResponse response) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		// 获取配置信息
-		List<SysConfiguration> sysConfigurations = sysConfigurationService.findByTableName(tableName);
+		List<SysConfiguration> sysConfigurations = sysConfigurationService.findByTableNameAndDataBase(tableName,dataBase);
 
 		List<SysConfiguration> tableData = new ArrayList<SysConfiguration>();
-		List<Map<String, Object>> list = sysConfigurationService.getColmunsByTableName(tableName);
+		List<Map<String, Object>> list = sysConfigurationService.getColmunsByTableNameAndDataBase(tableName,dataBase);
 		tableData.addAll(sysConfigurations);
 		list.stream().forEach(a -> {
 			boolean flag = true;
@@ -75,6 +101,7 @@ public class SysConfigurationController {
 				sysConfiguration.setName(a.get("column_name").toString());
 				sysConfiguration.setEgName(a.get("column_name").toString());
 				sysConfiguration.setTableName(tableName);
+				sysConfiguration.setDataBase(dataBase);
 				String dataType = a.get("data_type").toString();
 				if ("int".equals(dataType) || "bigInt".equals(dataType)) {
 					sysConfiguration.setType("string");
@@ -124,15 +151,15 @@ public class SysConfigurationController {
 	
 	
 	
-	@PostMapping("/CommonMenuAdd/{tableName}")
-	public @ResponseBody String CommonMenuAdd(@PathVariable String tableName, HttpServletRequest request,
+	@PostMapping("/CommonMenuAdd/{tableName}/{dataBase}")
+	public @ResponseBody String CommonMenuAdd(@PathVariable String tableName,@PathVariable String dataBase,  HttpServletRequest request,
 			HttpServerResponse response) {
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		Map<String, Object> descriptorsMap = new HashMap<String, Object>();
 
-		List<SysConfiguration> sysConfigurations = sysConfigurationService.findByTableName(tableName);
+		List<SysConfiguration> sysConfigurations = sysConfigurationService.findByTableNameAndDataBase(tableName,dataBase);
 		for (SysConfiguration sysConfiguration : sysConfigurations) {
 			Map<String, Object> sysConfigurationMap = new HashMap<String, Object>();
 			if ("enum".equals(sysConfiguration.getType())) {
@@ -156,7 +183,18 @@ public class SysConfigurationController {
 		return json;
 
 	}
-	
+	@PostMapping("/SaveCheckedLists")
+	public @ResponseBody JSONObject SaveCheckedLists( @RequestBody String[] checkedLists,HttpServletResponse response,HttpServletRequest request) {
+		try {
+			     
+			    dataBaseSetService.saveOrUpdate (checkedLists);
+				return ResponseUtil.ok("设置成功") .toJSONObject();
+		 
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseUtil.error("设置失败").toJSONObject();
+		}
+	}
 	
 	
 }

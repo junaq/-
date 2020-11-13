@@ -17,7 +17,11 @@
 	</div>
 	<script type="text/javascript">
 var key=getUrlKey("tableName");
-var data=getAjax('/SysConfiguration/CommonMenuAdd/'+key,'POST') ;
+var dataBase=getUrlKey("dataBase");
+var data=getAjax('/SysConfiguration/CommonMenuAdd/'+key+'/'+dataBase,'POST') ;
+
+
+
 console.log(data);
 var vm=new Vue({
 	el: '#CommonMenuAdd',
@@ -37,7 +41,7 @@ var vm=new Vue({
 
 			this.$refs['dynamic-form'].validate((valid) => {
 				if (valid) {
-					var jsonDate={"tableName":key,"data":this.data};
+					var jsonDate={"tableName":key,"dataBase":dataBase,"data":this.data};
 					console.log(jsonDate);
 	  
 					
@@ -47,12 +51,19 @@ var vm=new Vue({
 						    confirmButtonText: '确定',
 						    callback: action => {
 						    	if(res.data.statusCode == 200){		    		
-						    		reset();  
+						    		this.methods.reset();  
 						    	}
 						    }
 						});		
 					})
 					
+				}else{
+					this.$alert("数据验证错误", '提示', {
+					    confirmButtonText: '确定',
+					    callback: action => {
+					     
+					    }
+					});	
 				}
 			})
 		}

@@ -16,7 +16,7 @@ public class IntercepterConfig implements WebMvcConfigurer {
 				Arrays.asList("/login/**", "/pages/login/**", "/css/**", "/js/**", "/lib/**", "/img/**"));
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
-
+ 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")

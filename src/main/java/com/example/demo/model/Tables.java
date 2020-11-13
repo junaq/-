@@ -8,7 +8,7 @@ public class Tables {
 	 private String tableName;
 	 
 	 
-	 private String tableNameCh;
+	 private String dataBase;
   	
 	
 }

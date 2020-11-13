@@ -70,7 +70,8 @@ public class MenuController {
 				}
 				
 				
-				
+				jsonObject.set("no",user.getName());
+				jsonObject.set("no",user.getName());
 				jsonObject.set("name",user.getRealName());
 				jsonObject.set("url",user.getUrl());
 				jsonObject.set("navs", menus);

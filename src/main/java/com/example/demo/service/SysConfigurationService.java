@@ -8,20 +8,23 @@ import com.example.demo.model.SysConfiguration;
 import com.example.demo.model.User;
  
 public interface SysConfigurationService extends BaseSevice<SysConfiguration, Long> {
-	public List<String>ShowTables();
+	public List<Map<String, Object>> ShowTables();
 	
  
-	List<Map<String, Object>> getColmunsByTableName(String tableName);
+	List<Map<String, Object>> getColmunsByTableNameAndDataBase(String tableName,String dataBase);
 
 
     public void saveByList(List<SysConfiguration>sysConfigurations);
 
 
-	List<SysConfiguration> findByTableName(String tableName);
+	List<SysConfiguration> findByTableNameAndDataBase(String tableName,String dataBase);
 
 
 
 
 
 	public void saveCommonMenuData(JSONObject jsonDate, User user);
+
+
+	public List<String> ShowDataBases();
 }

@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.demo.Dao.DataBaseSetDao;
 import com.example.demo.Dao.MenuDao;
 import com.example.demo.Dao.SysConfigurationDao;
 import com.example.demo.Dao.SysLogDao;
@@ -43,11 +44,16 @@ public class SysConfigurationServiceImpl implements SysConfigurationService {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private DataBaseSetDao dataBaseSetDao;
 
 	@Override
-	public List<String> ShowTables() {
+	public List<Map<String,Object>> ShowTables() {
 		// TODO Auto-generated method stub
-		return sysConfigurationDao.ShowTables();
+		
+		List<String> dataBaseList=dataBaseSetDao.findCheckedDataBaseName();
+		return sysConfigurationDao.ShowTables(dataBaseList);
 	}
 
 	@Override
@@ -87,15 +93,15 @@ public class SysConfigurationServiceImpl implements SysConfigurationService {
 	}
 
 	@Override
-	public List<SysConfiguration> findByTableName(String tableName) {
+	public List<SysConfiguration> findByTableNameAndDataBase(String tableName,String dataBase) {
 		// TODO Auto-generated method stub
-		return sysConfigurationDao.findByTableName(tableName);
+		return sysConfigurationDao.findByTableNameAndDataBase(tableName,dataBase);
 	}
 
 	@Override
-	public List<Map<String, Object>> getColmunsByTableName(String tableName) {
+	public List<Map<String, Object>> getColmunsByTableNameAndDataBase(String tableName,String dataBase) {
 		// TODO Auto-generated method stub
-		return sysConfigurationDao.getColmunsByTableName(tableName);
+		return sysConfigurationDao.getColmunsByTableNameAndDataBase(tableName,dataBase);
 	}
 
 	@Override
@@ -110,7 +116,7 @@ public class SysConfigurationServiceImpl implements SysConfigurationService {
 				menu = new Menu();
 				menu.setParentId(0L);
 				menu.setTitle(sysConfigurations.get(0).getTableName());
-				menu.setHref("/pages/commonMenu/add.html?tableName=" + menu.getTitle());
+				menu.setHref("/pages/commonMenu/add.html?tableName=" + menu.getTitle()+"&&dataBase="+sysConfigurations.get(0).getDataBase());
 				menu.setIcon("el-icon-star-on");
 				menuDao.save(menu);
 			}
@@ -125,11 +131,12 @@ public class SysConfigurationServiceImpl implements SysConfigurationService {
 	public void saveCommonMenuData(JSONObject jsonDate, User user) {
 		// TODO Auto-generated method stub
 		String tableName = jsonDate.getString("tableName");
+		String dataBase = jsonDate.getString("dataBase");
 		JSONObject jsonObject = jsonDate.getJSONObject("data");
 		Set<String> keys = jsonObject.keySet();
 		String sql = "";
 		if (keys.size() > 0) {
-			tableName = "`" + tableName + "`";
+			tableName = "`" + dataBase + "`."+"`" + tableName + "`";
 			sql = " insert into " + tableName;
 			StringBuffer colmuns = new StringBuffer();
 			StringBuffer values = new StringBuffer();
@@ -182,5 +189,11 @@ public class SysConfigurationServiceImpl implements SysConfigurationService {
 			e.printStackTrace();
 		}
 		return df2.format(date1);
+	}
+
+	@Override
+	public List<String> ShowDataBases() {
+		// TODO Auto-generated method stub
+		return sysConfigurationDao.ShowDataBases();
 	}
 }

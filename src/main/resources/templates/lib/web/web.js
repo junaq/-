@@ -21,7 +21,17 @@ function setConfig() {
 }
 
 const config = setConfig()
-
+function validName(rule, value, callback){
+	console.log(value);
+	if(value){
+		if(value!=vm.ruleForm.passWord){
+			
+			callback(new Error("密码输入不一致！"));
+		}else{
+			callback();
+		}
+	}
+}
 // index vue 实例
 var vm = new Vue({
 	el: '#app',
@@ -31,9 +41,10 @@ var vm = new Vue({
 		 */
 		adminName: config.name,
 		ruleForm: {
-			name: '',
+			name: config.no,
 			realName:config.name,
-			passWord: ''
+			passWord: '',
+			RepassWord:''
 		},
 		readonly: true,
 		formLabelWidth: '120px',
@@ -49,6 +60,14 @@ var vm = new Vue({
 				message: '请输入密码',
 				trigger: 'blur'
 			},
+			RepassWord: [{
+				required: true,
+				message: '请再输入密码',
+				trigger: 'blur'
+			},
+			 
+			{validator:validName,
+				trigger: 'blur'}]
 		},
 		// 左侧导航栏
 		webInfo: {
@@ -104,20 +123,43 @@ var vm = new Vue({
 		openTabs:function(e){
 			openTabs(e);
 		},
+		handleAvatarSuccess(res,file){
+			console.log(res);
+			console.log(file);
+			this.$alert(res.meassage, '提示', {
+			    confirmButtonText: '确定',
+			    callback: action => {
+			    	if(res.statusCode == 200){		    		
+			    	  this.webInfo.url=config.url;
+			    	}
+			    }
+			});	
+		},
 		 handleClose () {
 		      this.$refs.ruleForm.resetFields()
-		      this.form = {
-		    		name: '',
-					passWord: ''
-		      }
+		 
 		    },
 		    handleSave () {
 		      this.$refs.ruleForm.validate((valid) => {
 		        if (valid) {
-		          console.log('输入正确')
-		          this.dialogFormVisible = false
+		        	axios.post("/login/updateUser", this.ruleForm).then((res) => {
+						 
+						this.$alert(res.data.meassage, '提示', {
+						    confirmButtonText: '确定',
+						    callback: action => {
+						    	if(res.data.statusCode == 200){		    		
+						    		 this.dialogFormVisible = false
+						    	}
+						    }
+						});	
+						
+						
+						
+					})
+		        	
+		         
 		        } else {
-		          console.log('输入错误')
+		          
 		        }
 		      })
 		    },

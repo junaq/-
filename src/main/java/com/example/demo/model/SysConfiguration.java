@@ -16,6 +16,7 @@ public class SysConfiguration {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String tableName;
+	private String dataBase;
 	private String name;
 	private String egName;
 	private String type;

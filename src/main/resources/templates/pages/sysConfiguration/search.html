@@ -63,7 +63,7 @@
 		       pagesize: 10,
 		       currpage: 1,
 		       getSearchInfo:[],
-		       colmuns:[{name:'tableName',configName:'表名'}]
+		       colmuns:[{name:'dataBase',configName:'数据库名'},{name:'tableName',configName:'表名'}]
 	    	
 	    },
 	      methods: {
@@ -80,7 +80,7 @@
 	        },
 	        handleGetMenu(val){
 	        	 
-	        	var i ={id:99,href:"/pages/sysConfiguration/add.html?tableName="+val.tableName,title:"配置菜单"};
+	        	var i ={id:99,href:"/pages/sysConfiguration/add.html?tableName="+val.tableName+"&&dataBase="+val.dataBase,title:"配置菜单"};
 	        	 
 	        	parent.openTabs(i);
 	        },
@@ -94,7 +94,7 @@
 	          var web = getAjax(url,'POST');
 	 
 	          let Data=web.data;
-	          let colmuns=web.colmuns;
+	         
 	          this.getSearchInfo = Data;
 // 	          this.colmuns.push( colmuns);
 	        }

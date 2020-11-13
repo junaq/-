@@ -16,17 +16,22 @@ public interface SysConfigurationDao extends JpaRepository<SysConfiguration, Lon
 
 	
 	
-	@Query(value = "Show tables" ,nativeQuery=true)
-	public List<String>ShowTables();
+	@Query(value = "SELECT table_name as tableName, table_schema as data_Base  FROM 	information_schema.TABLES WHERE table_schema IN ?1 AND TABLE_type = 'BASE TABLE'" ,nativeQuery=true)
+	public List<Map<String, Object>> ShowTables(List<String> dataBaseList);
 	
-	@Query(value = "select column_name,cast(data_type as CHAR(45) ) as data_type  from information_schema.columns where table_name=?1" ,nativeQuery=true)
-	public List<Map<String, Object>> getColmunsByTableName(String tableName);
+	@Query(value = "select column_name,cast(data_type as CHAR(45) ) as data_type  from information_schema.columns where table_name=?1 and table_schema=?2" ,nativeQuery=true)
+	public List<Map<String, Object>> getColmunsByTableNameAndDataBase(String tableName, String dataBase);
 
-	public List<SysConfiguration> findByTableName(String tableName);
+	 
+	public List<SysConfiguration> findByTableNameAndDataBase(String tableName, String dataBase);
 	
 	@Transactional
 	@Modifying
 	@Query(value="insert into ?1 (?2) values(?3)",nativeQuery = true)
 	public void addData(String tableName,String keys,String values);
+
+	
+	@Query(value = "Show DATABASEs" ,nativeQuery=true)
+	public List<String> ShowDataBases();
  	
 }

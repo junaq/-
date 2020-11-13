@@ -10,4 +10,6 @@ public interface UserService extends BaseSevice<User,Long> {
 
 	List<User> findByName(String name);
 
+	void updateUser(User user);
+
 }
