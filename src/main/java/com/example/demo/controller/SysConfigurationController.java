@@ -171,12 +171,12 @@ public class SysConfigurationController {
 				if(sysConfiguration.getSource()!=null) {		
 					sysConfigurationMap.put("enum", sysConfiguration.getSource().split(";"));
 				}
-				sysConfigurationMap.put("required","false".equals(sysConfiguration.getRequired())?false:true);
+				sysConfigurationMap.put("required","true".equals(sysConfiguration.getRequired())?true:false);
 
 			} else {
 				sysConfigurationMap.put("type",sysConfiguration.getType());
 				sysConfigurationMap.put("label",sysConfiguration.getEgName());
-				sysConfigurationMap.put("required","false".equals(sysConfiguration.getRequired())?false:true);
+				sysConfigurationMap.put("required","true".equals(sysConfiguration.getRequired())?true:false);
 		 
 			}
 			dataMap.put(sysConfiguration.getName(), null);
