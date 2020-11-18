@@ -114,6 +114,7 @@ public class SysConfigurationController {
 				} else {
 					sysConfiguration.setType("string");
 				}
+				sysConfiguration.setRequired("false");
 				tableData.add(sysConfiguration);
 
 			}
@@ -170,11 +171,17 @@ public class SysConfigurationController {
 				if(sysConfiguration.getSource()!=null) {		
 					sysConfigurationMap.put("enum", sysConfiguration.getSource().split(";"));
 				}
+				sysConfigurationMap.put("required","false".equals(sysConfiguration.getRequired())?false:true);
+
 			} else {
 				sysConfigurationMap.put("type",sysConfiguration.getType());
 				sysConfigurationMap.put("label",sysConfiguration.getEgName());
+				sysConfigurationMap.put("required","false".equals(sysConfiguration.getRequired())?false:true);
+		 
 			}
-			dataMap.put(sysConfiguration.getName(), "");
+			dataMap.put(sysConfiguration.getName(), null);
+		    
+			
 			descriptorsMap.put(sysConfiguration.getName(), sysConfigurationMap);
 		}
 

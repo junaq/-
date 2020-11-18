@@ -155,7 +155,7 @@ public class SysConfigurationServiceImpl implements SysConfigurationService {
 						}
 
 					}
-				} else {
+				} else if(value!=null){
 					colmuns.append("`" + key + "`,");
 					values.append(value + ",");
 				}

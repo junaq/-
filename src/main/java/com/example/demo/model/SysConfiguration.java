@@ -22,4 +22,5 @@ public class SysConfiguration {
 	private String type;
 	private String source;
 	private int priority;
+	private String required;
 }
